@@ -78,6 +78,45 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("rate24")
   );
 
+  function getRates() {
+    async function scrapeVisibleDiv(url, targetClass) {
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          console.error(`Failed to fetch page: ${response.status}`);
+          return null;
+        }
+
+        const text = await response.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, "text/html");
+
+        const divs = doc.querySelectorAll(`div.${targetClass}`);
+
+        for (let div of divs) {
+          const style = div.getAttribute("style") || "";
+          if (!/display:\s*none/i.test(style)) {
+            return div.innerHTML;
+          }
+        }
+
+        return null;
+      } catch (error) {
+        console.error("Error fetching or parsing page:", error);
+        return null;
+      }
+    }
+
+    // Example usage
+    const url = "https://thejewellersassociation.org";
+    const targetClass = "gold_rate";
+    scrapeVisibleDiv(url, targetClass).then((result) => {
+      if (result) {
+        console.log("Extracted innerHTML:", result);
+      }
+    });
+  }
+
   function ensureAtLeastOneItem() {
     if (items.length === 0) addDuplicateDiv();
   }
@@ -260,7 +299,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     rate24.dataset.listenerAdded = "true";
   }
-  //   ensureAtLeastOneItem();
+
+  getRates();
 });
 
 })();
