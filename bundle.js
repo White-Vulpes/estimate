@@ -78,45 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("rate24")
   );
 
-  function getRates() {
-    async function scrapeVisibleDiv(url, targetClass) {
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          console.error(`Failed to fetch page: ${response.status}`);
-          return null;
-        }
-
-        const text = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, "text/html");
-
-        const divs = doc.querySelectorAll(`div.${targetClass}`);
-
-        for (let div of divs) {
-          const style = div.getAttribute("style") || "";
-          if (!/display:\s*none/i.test(style)) {
-            return div.innerHTML;
-          }
-        }
-
-        return null;
-      } catch (error) {
-        console.error("Error fetching or parsing page:", error);
-        return null;
-      }
-    }
-
-    // Example usage
-    const url = "https://thejewellersassociation.org";
-    const targetClass = "gold_rate";
-    scrapeVisibleDiv(url, targetClass).then((result) => {
-      if (result) {
-        console.log("Extracted innerHTML:", result);
-      }
-    });
-  }
-
   function ensureAtLeastOneItem() {
     if (items.length === 0) addDuplicateDiv();
   }
@@ -127,38 +88,48 @@ document.addEventListener("DOMContentLoaded", () => {
     for (let i in items) {
       let rate = items[i].type == "18K" ? rate18.value : rate22.value;
       items[i].wastage =
-        (items[i].grosswgt * (items[i].touch / 100) * rate24.value) / rate -
-        items[i].grosswgt;
+        ((items[i].grosswgt - items[i].less) *
+          (items[i].touch / 100) *
+          rate24.value) /
+          rate -
+        (items[i].grosswgt - items[i].less);
       let amount =
-        (parseFloat(items[i].grosswgt) + parseFloat(items[i].wastage)) *
+        (parseFloat(items[i].grosswgt - items[i].less) +
+          parseFloat(items[i].wastage)) *
           parseFloat(rate) +
         parseFloat(items[i].stone);
 
       totalAmount += amount;
-      console.log(items[i].grosswgt, items[i].wastage, rate, items[i].stone);
       div.innerHTML += `<span class="text-base text-center">${
         items[i].name
       } - ${items[i].type}</span>
-      <div class="flex justify-between text-2xl">
+      <div class="flex justify-between text-base">
         <span>Weight</span>
         <span>${items[i].grosswgt}</span>
       </div>
-      <div class="flex justify-between text-2xl">
-        <span>Wastage@${((items[i].wastage * 100) / items[i].grosswgt).toFixed(
-          2
-        )}</span>
+      <div class="flex justify-between text-base">
+        <span>(-)Less</span>
+        <span>${items[i].less}</span>
+      </div>
+      <div class="flex justify-between text-base">
+        <span>Wastage@${(
+          (items[i].wastage * 100) /
+          (items[i].grosswgt - items[i].less)
+        ).toFixed(2)}</span>
         <span>${items[i].wastage.toFixed(3)}</span>
       </div>
-      <div class="flex justify-between text-2xl">
+      <div class="flex justify-between text-base">
         <span>S. Charges</span>
         <span>${items[i].stone}</span>
       </div>
       <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />
-      <div class="flex justify-between text-2xl">
-        <span class="text-xs">(${items[i].grosswgt} + ${items[
-        i
-      ].wastage.toFixed(3)}) * ${rate} + ${items[i].stone}</span>
-        <span class="text-xs">${amount.toFixed(0)}</span>
+      <div class="flex justify-between">
+        <span class="text-lg">(${(items[i].grosswgt - items[i].less).toFixed(
+          3
+        )} + ${items[i].wastage.toFixed(3)}) * ${rate} + ${
+        items[i].stone
+      }</span>
+        <span class="text-lg">${amount.toFixed(0)}</span>
       </div>
       <hr class="h-px my-2 bg-gray-200 border-0 dark:bg-gray-700" />`;
     }
@@ -213,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
               "stone_" + id
             }" class="bg-gray-50 hover:bg-gray-100 text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:-translate-y-1 focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 " placeholder="Enter text here" type="text" />
           </div>
-          <div class="p-1 bg-white rounded-lg font-mono col-span-2">
+          <div class="p-1 bg-white rounded-lg font-mono">
             <label class="block text-gray-700 text-sm font-bold mb-2">Type</label>
             <select id="${
               "type_" + id
@@ -221,6 +192,12 @@ document.addEventListener("DOMContentLoaded", () => {
               <option value="18K">18K</option>
               <option value="22K">22K</option>
             </select>
+          </div>
+          <div class="p-1 bg-white rounded-lg font-mono">
+            <label class="block text-gray-700 text-sm font-bold mb-2">Less</label>
+            <input id="${
+              "less_" + id
+            }" class="bg-gray-50 hover:bg-gray-100 text-sm custom-input w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm transition duration-300 ease-in-out transform focus:-translate-y-1 focus:outline-blue-300 hover:shadow-lg hover:border-blue-300 " placeholder="Enter text here" type="text" />
           </div>
         <button class="remove-btn col-span-2 mt-4 px-4 py-2 bg-red-500 text-white rounded-lg shadow" data-id="${id}">Remove</button>
       </div>
@@ -241,6 +218,9 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("stone_" + id).addEventListener("input", (e) => {
       formUpdate("stone_" + id, e.target.value);
     });
+    document.getElementById("less_" + id).addEventListener("input", (e) => {
+      formUpdate("less_" + id, e.target.value);
+    });
     items.push({
       id,
       name: "",
@@ -249,6 +229,7 @@ document.addEventListener("DOMContentLoaded", () => {
       grosswgt: "",
       wastage: "0",
       stone: "",
+      less: "",
     });
     updateBill();
   }
@@ -299,8 +280,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     rate24.dataset.listenerAdded = "true";
   }
-
-  getRates();
 });
 
 })();
