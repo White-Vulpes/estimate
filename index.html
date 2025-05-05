@@ -65,25 +65,63 @@
               x-transition:leave-end="transform translate-x-full"
               class="w-screen max-w-md"
             >
-              <div class="h-full flex flex-col py-6 bg-white shadow-xl">
+              <div class="h-full flex flex-col py-2 bg-white shadow-xl">
                 <div class="flex items-center justify-between px-4">
                   <h2 class="text-xl font-semibold text-black">Products</h2>
+                  <div class="flex items-center space-x-3">
+                    <label class="group flex items-center cursor-pointer">
+                      <input class="hidden peer" type="checkbox" id="gst" />
+
+                      <span
+                        class="relative w-6 h-6 flex justify-center items-center bg-gray-100 border-2 border-gray-400 rounded-md shadow-md transition-all duration-500 peer-checked:border-blue-500 peer-checked:bg-blue-500 peer-hover:scale-105"
+                      >
+                        <span
+                          class="absolute inset-0 bg-gradient-to-br from-white/30 to-white/10 opacity-0 peer-checked:opacity-100 rounded-md transition-all duration-500 peer-checked:animate-pulse"
+                        ></span>
+
+                        <svg
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          class="hidden w-5 h-5 text-white peer-checked:block transition-transform duration-500 transform scale-50 peer-checked:scale-100"
+                          xmlns="http://www.w3.org/2000/svg"
+                        ></svg>
+                      </span>
+
+                      <span
+                        class="ml-3 text-gray-700 group-hover:text-blue-500 font-medium transition-colors duration-300"
+                      >
+                        GST
+                      </span>
+                    </label>
+                  </div>
                 </div>
                 <div class="mt-4 px-4 h-full overflow-auto">
                   <div class="grid grid-cols-1 gap-4" id="container"></div>
                 </div>
-                <div class="grid grid-cols-2 m-6 gap-1">
+                <div class="grid grid-cols-2 mt-6 mr-6 ml-6 gap-1">
                   <button
                     id="add-btn"
-                    class="flex justify-center items-center bg-black text-white rounded-md text-sm p-2"
+                    class="flex justify-center font-mono items-center bg-black text-white rounded-md text-sm p-2"
                   >
                     Add Products
                   </button>
                   <button
                     x-on:click="open = false"
-                    class="flex justify-center items-center bg-sky-500 text-white rounded-md text-sm p-2"
+                    class="flex justify-center font-mono items-center bg-sky-500 text-white rounded-md text-sm p-2"
                   >
                     Done
+                  </button>
+                  <button
+                    id="add-old-btn"
+                    class="flex justify-center font-mono items-center bg-black text-white rounded-md text-sm p-2"
+                  >
+                    Add Old
+                  </button>
+                  <button
+                    id="add-old-btn"
+                    class="flex justify-center font-mono items-center bg-black text-white rounded-md text-sm p-2"
+                  >
+                    Add Scheme
                   </button>
                 </div>
               </div>
@@ -113,7 +151,7 @@
     </div>
     <div
       id="bill"
-      class="flex flex-col justify-center w-full max-w-sm font-mono"
+      class="flex flex-col justify-center w-full max-w-xs font-mono"
     ></div>
     <script
       src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
