@@ -335,6 +335,9 @@
   .w-screen {
     width: 100vw;
   }
+  .max-w-35 {
+    max-width: calc(var(--spacing) * 35);
+  }
   .max-w-full {
     max-width: 100%;
   }
@@ -372,6 +375,9 @@
   }
   .flex-col {
     flex-direction: column;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
   }
   .items-center {
     align-items: center;

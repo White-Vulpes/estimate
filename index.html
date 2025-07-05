@@ -6,8 +6,8 @@
     <title>Estimate</title>
   <script defer src="bundle.js"></script><link href="main.css" rel="stylesheet"></head>
   <body class="flex flex-col items-center min-h-screen">
-    <div class="flex justify-center w-full p-5 rounded-lg font-mono">
-      <div class="p-2 bg-white rounded-lg font-mono">
+    <div class="flex justify-center w-full p-5 rounded-lg font-mono flex-wrap">
+      <div class="p-2 bg-white rounded-lg font-mono max-w-35">
         <label class="block text-gray-700 text-sm font-bold mb-2"
           >18K Rate</label
         >
@@ -18,7 +18,7 @@
           type="number"
         />
       </div>
-      <div class="p-2 bg-white rounded-lg font-mono">
+      <div class="p-2 bg-white rounded-lg font-mono max-w-35">
         <label class="block text-gray-700 text-sm font-bold mb-2"
           >22K Rate</label
         >
@@ -29,7 +29,7 @@
           type="number"
         />
       </div>
-      <div class="p-2 bg-white rounded-lg font-mono">
+      <div class="p-2 bg-white rounded-lg font-mono max-w-35">
         <label class="block text-gray-700 text-sm font-bold mb-2"
           >24K Rate</label
         >
@@ -40,9 +40,9 @@
           type="number"
         />
       </div>
-      <div class="p-2 bg-white rounded-lg font-mono">
+      <div class="p-2 bg-white rounded-lg font-mono max-w-35">
         <label class="block text-gray-700 text-sm font-bold mb-2"
-          >Scheme Weight</label
+          >Scheme Wg.</label
         >
         <input
           id="schemeweight"
@@ -51,9 +51,9 @@
           type="number"
         />
       </div>
-      <div class="p-2 bg-white rounded-lg font-mono">
+      <div class="p-2 bg-white rounded-lg font-mono max-w-35">
         <label class="block text-gray-700 text-sm font-bold mb-2"
-          >Scheme Amount</label
+          >Scheme Amt.</label
         >
         <input
           id="schemeamount"
@@ -76,7 +76,8 @@
             x-transition:leave-end="opacity-0"
             class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
           ></div>
-          <section class="absolute inset-y-0 right-0 pl-10 max-w-full flex">
+          <section class="absolute inset-y-0 right-0 max-w-full flex">
+            <div x-on:click="open = false" class="w-screen"></div>
             <div
               x-show="open"
               x-transition:enter="transition-transform ease-out duration-300"
@@ -128,22 +129,10 @@
                     Add Products
                   </button>
                   <button
-                    x-on:click="open = false"
-                    class="flex justify-center font-mono items-center bg-sky-500 text-white rounded-md text-sm p-2"
-                  >
-                    Done
-                  </button>
-                  <button
                     id="add-old-btn"
                     class="flex justify-center font-mono items-center bg-black text-white rounded-md text-sm p-2"
                   >
                     Add Old
-                  </button>
-                  <button
-                    id="add-old-btn"
-                    class="flex justify-center font-mono items-center bg-black text-white rounded-md text-sm p-2"
-                  >
-                    Add Scheme
                   </button>
                 </div>
               </div>
