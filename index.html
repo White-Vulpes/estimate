@@ -159,6 +159,11 @@
       id="bill"
       class="flex flex-col justify-center w-full max-w-xs font-mono"
     ></div>
+    <div x-data="{ loading: false }" id="loading" class="absolute">
+      <div x-show="loading" class="flex justify-center items-center w-screen h-screen top-0 left-0 backdrop-blur-sm relative">
+        <div class="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
+      </div>
+    </div>
     <script
       src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js"
       defer
