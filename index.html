@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -155,7 +155,7 @@
         </button>
         <button
           id="verify-btn"
-          x-on:click="window.location.href = 'https://192.168.1.50:8000/gold-rates'"
+          x-on:click="window.location.href = 'https://raspberrypi:8000/gold-rates'"
           class="px-4 py-2 bg-black text-white rounded-md fixed bottom-5 right-37.5"
         >
           Verify
@@ -167,8 +167,13 @@
       class="flex flex-col justify-center w-full max-w-xs font-mono"
     ></div>
     <div x-data="{ loading: false }" id="loading" class="absolute">
-      <div x-show="loading" class="flex justify-center items-center w-screen h-screen top-0 left-0 backdrop-blur-sm relative">
-        <div class="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"></div>
+      <div
+        x-show="loading"
+        class="flex justify-center items-center w-screen h-screen top-0 left-0 backdrop-blur-sm relative"
+      >
+        <div
+          class="w-10 h-10 border-4 border-t-blue-500 border-gray-300 rounded-full animate-spin"
+        ></div>
       </div>
     </div>
     <script
